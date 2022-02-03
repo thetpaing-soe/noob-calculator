@@ -8,30 +8,41 @@ document.querySelector("#ac").onclick = _ => {
     document.querySelector("#recent").textContent = ""
 }
 document.querySelector("#del").onclick = _ => {
-    operations.pop()
-    if (operations.length === 0) {
-        document.querySelector("#result").textContent = "0"
-    }
-    else {
-        document.querySelector("#result").textContent = operations.join("")
+    if (result.length === 0) {
+        operations.pop()
+        if (operations.length === 0) {
+            document.querySelector("#result").textContent = "0"
+        }
+        else {
+            document.querySelector("#result").textContent = operations.join("")
+        }
     }
 }
 document.querySelector("#percent").onclick = _ => {
     if (!(operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/")) {
-        let number = parseFloat(operations.join(""))
-        if (!isNaN(number)) {
-            document.querySelector("#result").textContent = number / 100
-            result = number / 100
+        document.querySelector("#recent").textContent = ""
+        if (result.length !== 0) {
+            let float = parseFloat((result / 100).toFixed(9))
+            document.querySelector("#result").textContent = float
+            result = float
         }
+        // else if (operations.find(sign => sign !== "+"
+        // ) && operations.find(sign => sign !== "-") && operations.find(sign => sign !== "*") && operations.find(sign => sign !== "/")) {
+        //     let number = eval(operations.join(""))
+        //     document.querySelector("#result").textContent = number / 100
+        //     result = number / 100
+        // }
+        // operations = []
     }
-    operations = []
 }
 document.querySelector("#divide").onclick = _ => {
+    document.querySelector("#recent").textContent = ""
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "/"
     }
-    else if (result.length !== 0 && result !== Infinity) {
-        operations.push(result)
+    else if (result.length !== 0) {
+        let strResult = `${result}`
+        operations = [...strResult.split("")]
         operations.push("/")
     }
     else if (operations.length === 0) {
@@ -41,14 +52,17 @@ document.querySelector("#divide").onclick = _ => {
     else {
         operations.push("/")
     }
+    result = ""
     document.querySelector("#result").textContent = operations.join("")
 }
 document.querySelector("#multi").onclick = _ => {
+    document.querySelector("#recent").textContent = ""
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "*"
     }
-    else if (result.length !== 0 && result !== Infinity) {
-        operations.push(result)
+    else if (result.length !== 0) {
+        let strResult = `${result}`
+        operations = [...strResult.split("")]
         operations.push("*")
     }
     else if (operations.length === 0) {
@@ -58,14 +72,17 @@ document.querySelector("#multi").onclick = _ => {
     else {
         operations.push("*")
     }
+    result = ""
     document.querySelector("#result").textContent = operations.join("")
 }
 document.querySelector("#minus").onclick = _ => {
+    document.querySelector("#recent").textContent = ""
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "-"
     }
-    else if (result.length !== 0 && result !== Infinity) {
-        operations.push(result)
+    else if (result.length !== 0) {
+        let strResult = `${result}`
+        operations = [...strResult.split("")]
         operations.push("-")
     }
     else if (operations.length === 0) {
@@ -75,14 +92,17 @@ document.querySelector("#minus").onclick = _ => {
     else {
         operations.push("-")
     }
+    result = ""
     document.querySelector("#result").textContent = operations.join("")
 }
 document.querySelector("#plus").onclick = _ => {
+    document.querySelector("#recent").textContent = ""
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "+"
     }
-    else if (result.length !== 0 && result !== Infinity) {
-        operations.push(result)
+    else if (result.length !== 0) {
+        let strResult = `${result}`
+        operations = [...strResult.split("")]
         operations.push("+")
     }
     else if (operations.length === 0) {
@@ -92,6 +112,7 @@ document.querySelector("#plus").onclick = _ => {
     else {
         operations.push("+")
     }
+    result = ""
     document.querySelector("#result").textContent = operations.join("")
 }
 document.querySelector("#one").onclick = _ => {
@@ -162,12 +183,16 @@ document.querySelector("#dot").onclick = _ => {
 }
 document.querySelector("#equal").onclick = _ => {
     let ans = eval(operations.join(""))
-    strAns = `${ans}`
-    if (strAns.length > 15 && strAns.split("").find(dot => dot === ".")) {
-        ans = ans.toFixed(9)
+    if (ans || ans === 0) {
+        let floatAns = parseFloat(ans.toFixed(9))
+        document.querySelector("#recent").textContent = operations.join("") + "="
+        if (floatAns === Infinity) {
+            document.querySelector("#result").textContent = "Can't divide by zero."
+        }
+        else {
+            document.querySelector("#result").textContent = floatAns
+            result = floatAns
+        }
     }
-    document.querySelector("#recent").textContent = operations.join("") + " ="
-    document.querySelector("#result").textContent = ans
     operations = []
-    result = ans
 }
