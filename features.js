@@ -21,18 +21,16 @@ document.querySelector("#del").onclick = _ => {
 document.querySelector("#percent").onclick = _ => {
     if (!(operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/")) {
         document.querySelector("#recent").textContent = ""
-        if (result.length !== 0) {
+        if (result.length !== 0 && result !== Infinity) {
             let float = parseFloat((result / 100).toFixed(9))
             document.querySelector("#result").textContent = float
             result = float
         }
-        // else if (operations.find(sign => sign !== "+"
-        // ) && operations.find(sign => sign !== "-") && operations.find(sign => sign !== "*") && operations.find(sign => sign !== "/")) {
-        //     let number = eval(operations.join(""))
-        //     document.querySelector("#result").textContent = number / 100
-        //     result = number / 100
-        // }
-        // operations = []
+        else {
+            let float = parseFloat((eval(operations.join("")) / 100).toFixed(9))
+            document.querySelector("#result").textContent = float
+            result = float
+        }
     }
 }
 document.querySelector("#divide").onclick = _ => {
@@ -40,7 +38,7 @@ document.querySelector("#divide").onclick = _ => {
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "/"
     }
-    else if (result.length !== 0) {
+    else if (result.length !== 0 && result !== Infinity) {
         let strResult = `${result}`
         operations = [...strResult.split("")]
         operations.push("/")
@@ -60,7 +58,7 @@ document.querySelector("#multi").onclick = _ => {
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "*"
     }
-    else if (result.length !== 0) {
+    else if (result.length !== 0 && result !== Infinity) {
         let strResult = `${result}`
         operations = [...strResult.split("")]
         operations.push("*")
@@ -80,7 +78,7 @@ document.querySelector("#minus").onclick = _ => {
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "-"
     }
-    else if (result.length !== 0) {
+    else if (result.length !== 0 && result !== Infinity) {
         let strResult = `${result}`
         operations = [...strResult.split("")]
         operations.push("-")
@@ -100,7 +98,7 @@ document.querySelector("#plus").onclick = _ => {
     if (operations[operations.length - 1] === "+" || operations[operations.length - 1] === "-" || operations[operations.length - 1] === "*" || operations[operations.length - 1] === "/") {
         operations[operations.length - 1] = "+"
     }
-    else if (result.length !== 0) {
+    else if (result.length !== 0 && result !== Infinity) {
         let strResult = `${result}`
         operations = [...strResult.split("")]
         operations.push("+")
@@ -183,11 +181,12 @@ document.querySelector("#dot").onclick = _ => {
 }
 document.querySelector("#equal").onclick = _ => {
     let ans = eval(operations.join(""))
-    if (ans || ans === 0) {
+    if (ans || ans === 0 || isNaN(ans)) {
         let floatAns = parseFloat(ans.toFixed(9))
         document.querySelector("#recent").textContent = operations.join("") + "="
-        if (floatAns === Infinity) {
+        if (floatAns === Infinity || floatAns === -Infinity || isNaN(floatAns)) {
             document.querySelector("#result").textContent = "Can't divide by zero."
+            result = Infinity
         }
         else {
             document.querySelector("#result").textContent = floatAns
